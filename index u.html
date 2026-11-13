@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wait for it Jokes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #greeting {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Wait for it Jokes</h1>
+
+    <button id="get-greeting">Tell Me a Joke!</button>
+
+    <div id="greeting"></div>
+
+    <script>
+        const getGreeting = document.getElementById("get-greeting");
+        const greeting = document.getElementById("greeting");
+
+        let greetingList = [];
+
+        async function fetchGreetings() {
+            try {
+                const response = await fetch("greetings.json");
+                const data = await response.json();
+
+                greetingList = data.items;
+            } catch (error) {
+                console.error("Error loading jokes:", error);
+                greeting.textContent = "Could not load jokes.";
+            }
+        }
+
+        fetchGreetings();
+
+        getGreeting.addEventListener("click", () => {
+            if (greetingList.length === 0) {
+                greeting.textContent = "Jokes are still loading...";
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * greetingList.length);
+            greeting.textContent = greetingList[randomIndex];
+        });
+    </script>
+
+</body>
+</html>
